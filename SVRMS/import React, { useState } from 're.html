@@ -1,0 +1,536 @@
+import React, { useState } from 'react';
+import { MapPin, Calendar, Clock, Phone, Share2, Music, BookOpen, Heart, Gift, Coffee, Users, Image as ImageIcon, Copy, ExternalLink, User, Star, Mic2, Disc, Book, Flame, Truck, Utensils, Instagram, Youtube } from 'lucide-react';
+
+const App = () => {
+  const [copied, setCopied] = useState(false);
+  const [copiedBank, setCopiedBank] = useState(false);
+
+  // क्लिपबोर्डवर मजकूर कॉपी करण्यासाठी फंक्शन
+  const copyToClipboard = (text, setFlag) => {
+    const textArea = document.createElement("textarea");
+    textArea.value = text;
+    document.body.appendChild(textArea);
+    textArea.select();
+    try {
+      document.execCommand('copy');
+      setFlag(true);
+      setTimeout(() => setFlag(false), 2000);
+    } catch (err) {
+      console.error('Copy failed', err);
+    }
+    document.body.removeChild(textArea);
+  };
+
+  // निमंत्रण पत्रिका कॉपी करण्यासाठी
+  const copyInvitation = () => {
+    const text = `राम कृष्ण हरी !!
+श्री विठ्ठल रुक्मिणी मंदिर वैकुंठ धाम, सिवनी जिला पांढुर्णा (म. प्र.)
+श्री अखण्ड विठ्ठल नाम सप्ताह (वर्ष 130 वा)
+शतकोत्तर रौप्य महोत्सव वर्ष निमित्य !!
+दिनांक: 23 जनवरी 2026 से 01 फरवरी 2026 तक
+आप सभी परिवार सहित सादर आमंत्रित हैं।`;
+    copyToClipboard(text, setCopied);
+  };
+
+  // इमेज लोडिंग एरर हाताळण्यासाठी
+  const ImageWithFallback = ({ src, alt, className }) => {
+    const [loadError, setLoadError] = useState(false);
+
+    if (loadError) return null;
+
+    return (
+      <div className={`relative overflow-hidden rounded-xl shadow-lg bg-orange-50 border-2 border-orange-200 ${className}`}>
+        <img 
+          src={src} 
+          alt={alt}
+          className="w-full h-full object-cover transition-transform duration-500 hover:scale-110"
+          onError={() => setLoadError(true)}
+        />
+      </div>
+    );
+  };
+
+  // कीर्तनकारांची यादी
+  const kirtankarList = [
+    { date: "25 जनवरी 2026 (रथ सप्तमी)", name: "ह.भ.प. श्री गायन गंधर्व पंढरीनाथ महाराज आरु (आळंदी)" },
+    { date: "26 जनवरी 2026 (अष्टमी)", name: "ह.भ.प. श्री गुरुवर्य उल्हास महाराज सुर्यवंशी (आळंदी)" },
+    { date: "27 जनवरी 2026 (नवमी)", name: "ह.भ.प. श्री गुरुवर्य पोपट महाराज कासारखेडकर (खान्देश)" },
+    { date: "28 जनवरी 2026 (दशमी)", name: "ह.भ.प. श्री शिवाजी महाराज बावस्कर विनोदाचार्य (बुलढाना)" },
+    { date: "29 जनवरी 2026 (एकादशी)", name: "ह.भ.प. श्री सोपान महाराज सानप शास्त्री (हिंगोली)" },
+    { date: "30 जनवरी 2026 (द्वादशी)", name: "ह.भ.प. श्री पुरुषोत्तम दादा महाराज पाटील (आवाजाचे जादुगर) (बुलढाना)" },
+    { date: "31 जनवरी 2026 (त्रयोदशी)", name: "ह.भ.प. श्री किर्तन केसरी भूषण महाराज शिंगरवाडे (केदारेश्वर संस्थान - शेंदुरजनाघाट)" },
+    { 
+      date: "01 फरवरी 2026 (चतुर्दशी)", 
+      name: "ह.भ.प. श्री पद्माकर महाराज देशमुख (अमरावती) यांचे काल्याचे किर्तन", 
+      time: "वेळ - 11:30 ते 2:00 व लगेच महाप्रसाद",
+      isSpecial: true 
+    }
+  ];
+
+  return (
+    <div className="min-h-screen bg-[#fff9f2] text-slate-800 font-serif selection:bg-orange-200 pb-20">
+      
+      {/* १. मुखेल हेडर (Hero Section) */}
+      <header className="relative bg-gradient-to-b from-orange-600 to-orange-500 text-white pt-16 pb-24 px-4 text-center overflow-hidden">
+        <div className="absolute top-0 left-0 w-full h-full opacity-10 pointer-events-none" 
+             style={{ backgroundImage: 'radial-gradient(circle, #fff 1px, transparent 1px)', backgroundSize: '40px 40px' }}></div>
+        
+        <div className="max-w-4xl mx-auto relative z-10">
+          <div className="inline-block px-4 py-1 mb-6 rounded-full bg-white/20 backdrop-blur-sm border border-white/30 text-sm font-bold tracking-widest uppercase">
+            🚩 राम कृष्ण हरी 🚩
+          </div>
+          <h1 className="text-4xl md:text-6xl font-bold mb-4 drop-shadow-md">
+            श्री विठ्ठल रुक्मिणी मंदिर
+          </h1>
+          <p className="text-xl md:text-2xl font-light mb-8 opacity-90">
+            वैकुंठ धाम, सिवनी, जिला-पांढुर्णा (म. प्र.)
+          </p>
+          <div className="bg-white/10 inline-block p-6 rounded-2xl border border-white/20 backdrop-blur-md">
+            <h2 className="text-2xl md:text-3xl font-bold text-yellow-300">
+              श्री अखण्ड विठ्ठल नाम सप्ताह
+            </h2>
+            <p className="text-lg mt-2 font-semibold">वर्ष १३० वा — शतकोत्तर रौप्य महोत्सव</p>
+          </div>
+        </div>
+      </header>
+
+      {/* मुख्य मजकूर */}
+      <main className="max-w-5xl mx-auto px-4 -mt-12">
+        
+        {/* फोटो गॅलरी */}
+        <section className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12 empty:hidden">
+          <ImageWithFallback 
+            src="Screenshot 2025-12-26 110400.jpg" 
+            alt="विठ्ठल रुक्मिणी मंदिर दृश्य १" 
+            className="aspect-video md:aspect-square"
+          />
+          <ImageWithFallback 
+            src="Screenshot 2025-12-26 110610.jpg" 
+            alt="विठ्ठल रुक्मिणी मंदिर दृश्य २" 
+            className="aspect-video md:aspect-square"
+          />
+        </section>
+
+        {/* १. स्नेह निमंत्रण कार्ड */}
+        <section className="bg-white rounded-3xl shadow-xl border border-orange-100 p-8 md:p-12 mb-12 relative overflow-hidden">
+          <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-orange-400 via-yellow-400 to-orange-400"></div>
+          
+          <div className="text-center mb-10">
+            <span className="text-orange-600 text-3xl">🪔</span>
+            <h3 className="text-3xl font-bold text-orange-800 mt-4 mb-2">स्नेह निमंत्रण</h3>
+            <div className="w-24 h-1 bg-orange-200 mx-auto"></div>
+          </div>
+
+          <div className="space-y-6 text-center text-lg md:text-xl leading-relaxed text-slate-700">
+            <p className="font-bold text-orange-700">राम कृष्ण हरी !!</p>
+            <p>
+              श्री विठ्ठल रुक्मिणी मंदिर वैकुंठ धाम, सिवनी (पांढुर्णा) येथे 
+              <span className="font-bold text-orange-800"> शतकोत्तर रौप्य महोत्सव </span> 
+              वर्षानिमित्त आयोजित 
+              <span className="font-bold text-orange-800"> १३० व्या अखण्ड विठ्ठल नाम सप्ताहात </span> 
+              आपणा सर्वांचे स्वागत आहे.
+            </p>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 my-8">
+              <div className="p-4 rounded-xl bg-orange-50 flex flex-col items-center">
+                <Music className="text-orange-600 mb-2" size={32} />
+                <p className="font-bold">कीर्तन महोत्सव</p>
+              </div>
+              <div className="p-4 rounded-xl bg-orange-50 flex flex-col items-center border-2 border-orange-200 bg-orange-100/50 shadow-inner">
+                <BookOpen className="text-orange-700 mb-2" size={32} />
+                <p className="font-black text-orange-900">श्री राम कथा</p>
+              </div>
+              <div className="p-4 rounded-xl bg-orange-50 flex flex-col items-center">
+                <Heart className="text-orange-600 mb-2" size={32} />
+                <p className="font-bold">ज्ञानेश्वरी पारायण</p>
+              </div>
+            </div>
+
+            <p className="italic text-slate-600">
+              भव्य कीर्तन महोत्सव, श्री राम कथा और ज्ञानेश्वरी पारायण का दिव्य अनुभव लेने अवश्य पधारें।
+            </p>
+
+            <p className="font-bold text-2xl text-orange-800 mt-8">
+              जय हरी विठ्ठल !
+            </p>
+          </div>
+
+          <div className="mt-12 grid grid-cols-1 md:grid-cols-2 gap-8 border-t border-orange-100 pt-10">
+            <div className="flex items-start space-x-4">
+              <div className="bg-orange-100 p-3 rounded-full"><Calendar className="text-orange-600" /></div>
+              <div>
+                <h4 className="font-bold text-orange-900">दिनांक</h4>
+                <p className="text-slate-600">२३ जानेवारी २०२६ ते ०१ फेब्रुवारी २०२६</p>
+              </div>
+            </div>
+            <div className="flex items-start space-x-4">
+              <div className="bg-orange-100 p-3 rounded-full"><MapPin className="text-orange-600" /></div>
+              <div>
+                <h4 className="font-bold text-orange-900">स्थान</h4>
+                <p className="text-slate-600 leading-snug">श्री विठ्ठल रुक्मिणी मंदिर, वैकुंठ धाम, सिवनी</p>
+              </div>
+            </div>
+          </div>
+
+          <div className="mt-12 text-center">
+            <button 
+              onClick={copyInvitation}
+              className="inline-flex items-center px-6 py-3 bg-orange-600 text-white rounded-full font-bold hover:bg-orange-700 transition-colors shadow-lg active:scale-95"
+            >
+              <Share2 size={20} className="mr-2" />
+              {copied ? 'आमंत्रण कॉपी झाले!' : 'आमंत्रण कॉपी करा'}
+            </button>
+          </div>
+        </section>
+
+        {/* २. श्रीराम कथा - मुख्य हायलाईट */}
+        <section className="mb-12 relative group">
+          <div className="absolute inset-0 bg-red-600 rounded-[2.5rem] blur-2xl opacity-15 animate-pulse"></div>
+          <div className="bg-gradient-to-br from-orange-600 via-red-600 to-orange-700 rounded-[2.5rem] shadow-2xl p-1.5 md:p-2.5 relative overflow-hidden border-b-8 border-r-4 border-black/10">
+            <div className="border-4 border-double border-yellow-400/40 rounded-[2.2rem] p-8 md:p-14 text-center text-white relative z-10">
+              <div className="flex justify-center mb-8">
+                <div className="relative">
+                  <div className="absolute inset-0 bg-yellow-400 blur-lg opacity-30"></div>
+                  <div className="bg-white/10 p-5 rounded-full backdrop-blur-md border border-yellow-300/40 shadow-xl">
+                    <BookOpen size={56} className="text-yellow-300 drop-shadow-glow" />
+                  </div>
+                </div>
+              </div>
+              
+              <h2 className="text-5xl md:text-7xl font-black mb-6 tracking-tighter drop-shadow-2xl font-serif">
+                !! श्रीराम कथा !!
+              </h2>
+              
+              <div className="w-48 h-1.5 bg-gradient-to-r from-transparent via-yellow-400 to-transparent mx-auto mb-10 rounded-full"></div>
+              
+              <div className="space-y-6">
+                <p className="text-2xl md:text-3xl font-bold text-yellow-200/90 uppercase tracking-[0.2em]">
+                  — कथा व्यास —
+                </p>
+                <div className="inline-block relative py-2">
+                   <h3 className="text-4xl md:text-6xl font-black text-white drop-shadow-[0_4px_4px_rgba(0,0,0,0.5)] px-6 leading-tight">
+                     श्री श्यामनारायणदास महाराज चौबे
+                   </h3>
+                   <div className="absolute -top-6 -right-6 opacity-60"><Star size={48} fill="#facc15" className="text-yellow-400" /></div>
+                   <div className="absolute -bottom-6 -left-6 opacity-60"><Star size={48} fill="#facc15" className="text-yellow-400" /></div>
+                </div>
+                <p className="text-3xl md:text-4xl font-bold text-yellow-300 italic tracking-wide">
+                  (श्री अयोध्याजी) अमरावती
+                </p>
+              </div>
+              
+              <div className="mt-12 flex justify-center items-center space-x-4 bg-black/10 inline-flex px-8 py-3 rounded-full border border-white/10 backdrop-blur-sm">
+                <Flame size={28} fill="#facc15" className="text-yellow-400 animate-bounce" />
+                <p className="text-xl md:text-2xl font-bold text-white tracking-wide">दिव्य अनुभूती घेण्यासाठी नक्की या!</p>
+                <Flame size={28} fill="#facc15" className="text-yellow-400 animate-bounce" />
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ३. योगदान विभाग */}
+        <section className="mb-12 bg-gradient-to-br from-orange-50 to-yellow-50 rounded-3xl shadow-xl p-8 border border-orange-200 overflow-hidden relative">
+          <div className="absolute -top-12 -right-12 p-4 opacity-10">
+            <Gift size={200} className="text-orange-600" />
+          </div>
+          
+          <div className="relative z-10">
+            <h3 className="text-2xl font-bold text-orange-900 mb-4 flex items-center">
+               उत्सवात सहभागी व्हा ✨ (योगदान)
+            </h3>
+            <p className="text-slate-700 mb-8 max-w-2xl">
+              या १३० व्या भव्य नाम सप्ताहात आपण अन्नदान, सेवा किंवा इतर माध्यमातून आपले सप्रेम योगदान देऊ शकता. आपल्या सहकार्याने हा उत्सव अधिक मंगलमय होईल.
+            </p>
+            
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+              <div className="bg-white p-6 rounded-2xl shadow-sm border border-orange-100 text-center hover:shadow-md transition-all relative overflow-hidden border-b-4 border-b-orange-200">
+                <div className="bg-orange-100 w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <Coffee className="text-orange-600" />
+                </div>
+                <h4 className="font-bold text-orange-800">अन्नदान</h4>
+                <p className="text-sm text-slate-500 mt-2">धान्य किंवा आर्थिक मदत.</p>
+                
+                <div className="mt-6 pt-4 border-t border-orange-50 text-left bg-orange-50/50 p-3 rounded-xl">
+                  <p className="text-[10px] font-bold text-orange-700 mb-1 uppercase tracking-wider text-center">Bank Account Details</p>
+                  <div className="text-xs space-y-1 text-slate-700 font-sans">
+                    <p className="font-bold text-[11px]">Bank of Maharashtra</p>
+                    <p className="flex justify-between items-center group cursor-pointer" onClick={() => copyToClipboard("60504394835", setCopiedBank)}>
+                      <span>A/C: <span className="font-semibold">60504394835</span></span>
+                      <Copy size={12} className="text-orange-400 opacity-0 group-hover:opacity-100 transition-opacity" />
+                    </p>
+                    <p>IFSC: <span className="font-semibold">MAHB0000686</span></p>
+                  </div>
+                  {copiedBank && <p className="text-[9px] text-green-600 mt-1 text-center font-bold">A/C Number Copied!</p>}
+                </div>
+              </div>
+              
+              <div className="bg-white p-6 rounded-2xl shadow-sm border border-orange-100 text-center hover:shadow-md transition-all border-b-4 border-b-orange-200">
+                <div className="bg-orange-100 w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <Users className="text-orange-600" />
+                </div>
+                <h4 className="font-bold text-orange-800">श्रमदान/सेवा</h4>
+                <p className="text-sm text-slate-500 mt-2">स्वयंसेवक म्हणून उत्सवात सेवा देण्यासाठी.</p>
+              </div>
+              
+              <div className="bg-white p-6 rounded-2xl shadow-sm border border-orange-100 text-center hover:shadow-md transition-all border-b-4 border-b-orange-200">
+                <div className="bg-orange-100 w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <Gift className="text-orange-600" />
+                </div>
+                <h4 className="font-bold text-orange-800">इतर देणगी</h4>
+                <p className="text-sm text-slate-500 mt-2">मंडप, सजावट किंवा अन्य व्यवस्थांसाठी.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ४. आठवणी विभाग */}
+        <section className="mb-12">
+          <div className="flex items-center space-x-3 mb-6">
+             <ImageIcon className="text-orange-600" />
+             <h3 className="text-2xl font-bold text-orange-900">मागील सोहळ्याच्या काही आठवणी</h3>
+          </div>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <ImageWithFallback src="Screenshot 2025-12-26 110400.jpg" alt="उत्सव दृश्य १" className="aspect-square" />
+            <ImageWithFallback src="Screenshot 2025-12-26 110610.jpg" alt="उत्सव दृश्य २" className="aspect-square" />
+            <ImageWithFallback src="new_image_3.jpg" alt="नवीन फोटो ३" className="aspect-square" />
+            <ImageWithFallback src="new_image_4.jpg" alt="नवीन फोटो ४" className="aspect-square" />
+          </div>
+        </section>
+
+        {/* ५. दैनिक कार्यक्रम, पारायण, आणि शोभायात्रा */}
+        <section className="mb-12 grid grid-cols-1 md:grid-cols-2 gap-8">
+           <div className="flex flex-col space-y-8">
+              <div className="bg-orange-800 text-white p-8 md:p-10 rounded-3xl shadow-lg border-b-4 border-orange-950">
+                <h3 className="text-2xl font-bold mb-6 flex items-center">
+                  <Clock className="mr-3" /> दैनिक कार्यक्रम
+                </h3>
+                <ul className="space-y-4 opacity-95 text-lg">
+                  <li className="flex justify-between items-center border-b border-orange-700/50 pb-2">
+                    <span>सकाळी ८ ते ११</span>
+                    <span className="font-bold">ज्ञानेश्वरी पारायण</span>
+                  </li>
+                  <li className="flex justify-between items-center border-b border-orange-700/50 pb-2">
+                    <span>सकाळी ११ ते १२</span>
+                    <span className="font-bold">महिला भजन</span>
+                  </li>
+                  <li className="flex justify-between items-center border-b border-orange-700/50 pb-2">
+                    <span>दुपारी १ ते ५</span>
+                    <span className="font-bold">श्रीराम कथा</span>
+                  </li>
+                  <li className="flex justify-between items-center border-b border-orange-700/50 pb-2">
+                    <span>संध्याकाळी ५ ते ६</span>
+                    <span className="font-bold">हरिपाठ</span>
+                  </li>
+                  <li className="flex justify-between items-center pb-2">
+                    <span>रात्री ७ ते ९</span>
+                    <span className="font-bold">कीर्तन</span>
+                  </li>
+                </ul>
+              </div>
+
+              <div className="bg-white p-8 rounded-3xl shadow-lg border-l-8 border-orange-600 border border-orange-100 relative overflow-hidden">
+                <div className="absolute top-0 right-0 p-4 opacity-5 pointer-events-none">
+                  <Book size={80} className="text-orange-600" />
+                </div>
+                <h3 className="text-2xl font-bold text-orange-900 mb-6 flex items-center">
+                  !! ग्रंथराज ज्ञानेश्वरी पारायण !!
+                </h3>
+                <div className="space-y-4">
+                  <div className="flex items-start bg-orange-50 p-3 rounded-xl border border-orange-100 shadow-sm">
+                    <span className="text-orange-600 mr-3 mt-1 shrink-0">🚩</span>
+                    <p className="font-bold text-slate-800 text-base md:text-lg leading-tight">
+                      श्री ह.भ.प. मारोतराव महाराज पातूरकर (देवी)
+                    </p>
+                  </div>
+                  <div className="flex items-start bg-orange-50 p-3 rounded-xl border border-orange-100 shadow-sm">
+                    <span className="text-orange-600 mr-3 mt-1 shrink-0">🚩</span>
+                    <p className="font-bold text-slate-800 text-base md:text-lg leading-tight">
+                      श्री ह.भ.प. यादवराव महाराज भाडे (शिवनी)
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="bg-gradient-to-br from-yellow-50 to-orange-50 p-8 rounded-3xl shadow-lg border-2 border-orange-200 relative overflow-hidden">
+                <div className="absolute -bottom-4 -right-4 opacity-10">
+                  <Utensils size={120} className="text-orange-600" />
+                </div>
+                <h3 className="text-2xl font-bold text-orange-900 mb-6 flex items-center uppercase tracking-tight">
+                  !! भव्य शोभायात्रा आणि महाप्रसाद !!
+                </h3>
+                <div className="space-y-6">
+                  <div className="flex items-start space-x-4">
+                    <div className="bg-orange-600 text-white p-2 rounded-lg shadow-md shrink-0 mt-1">
+                      <Truck size={20} />
+                    </div>
+                    <div>
+                      <p className="text-sm font-black text-orange-700 uppercase tracking-widest">३१/०१/२०२६ (शनिवार)</p>
+                      <p className="text-lg font-bold text-slate-800">भव्य शोभायात्रा</p>
+                      <p className="text-sm font-medium text-slate-500 italic">दुपारी ३:०० ते ५:०० वाजेपर्यंत</p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-start space-x-4">
+                    <div className="bg-orange-600 text-white p-2 rounded-lg shadow-md shrink-0 mt-1">
+                      <Utensils size={20} />
+                    </div>
+                    <div>
+                      <p className="text-sm font-black text-orange-700 uppercase tracking-widest">०१/०२/२०२६ (रविवार)</p>
+                      <p className="text-lg font-bold text-slate-800">महाप्रसाद वितरण</p>
+                      <p className="text-sm font-medium text-slate-500 italic">दुपारी २:०० वाजता (लगेच)</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+           </div>
+
+           <div className="flex flex-col space-y-8">
+             <div className="bg-white p-8 rounded-3xl shadow-lg border border-orange-100 relative overflow-hidden flex flex-col justify-center">
+                <div className="absolute top-0 right-0 p-4 opacity-5 pointer-events-none">
+                  <Phone size={100} className="text-orange-600" />
+                </div>
+                <h3 className="text-2xl font-bold text-orange-800 mb-6 flex items-center">
+                  अधिक माहितीसाठी संपर्क
+                </h3>
+                <div className="space-y-4">
+                  <a href="tel:7693033765" className="flex items-center p-5 bg-orange-50 rounded-2xl border border-orange-100 hover:bg-orange-100 transition-all group">
+                    <div className="bg-orange-600 p-3 rounded-xl text-white mr-5 shadow-sm group-hover:scale-110 transition-transform"><Phone size={24} /></div>
+                    <div><p className="text-xl md:text-2xl font-bold text-slate-800 tracking-wider">7693033765</p></div>
+                    <ExternalLink size={18} className="ml-auto text-orange-300" />
+                  </a>
+                  <a href="tel:8989478989" className="flex items-center p-5 bg-orange-50 rounded-2xl border border-orange-100 hover:bg-orange-100 transition-all group">
+                    <div className="bg-orange-600 p-3 rounded-xl text-white mr-5 shadow-sm group-hover:scale-110 transition-transform"><Phone size={24} /></div>
+                    <div><p className="text-xl md:text-2xl font-bold text-slate-800 tracking-wider">8989478989</p></div>
+                    <ExternalLink size={18} className="ml-auto text-orange-300" />
+                  </a>
+                </div>
+             </div>
+
+             <div className="bg-orange-50 p-6 rounded-3xl shadow-md border border-orange-200 relative overflow-hidden">
+                <h3 className="text-xl font-bold text-orange-900 mb-4 flex items-center">
+                  !! गायक वृंद !!
+                </h3>
+                <div className="space-y-3 text-slate-800 text-sm">
+                  <div className="flex items-start">
+                    <span className="text-orange-600 mr-2 shrink-0">🚩</span>
+                    <p className="font-bold">श्री ह.भ.प. संतोष महाराज वाघ (जालना)</p>
+                  </div>
+                  <div className="flex items-start">
+                    <span className="text-orange-600 mr-2 shrink-0">🚩</span>
+                    <p className="font-bold">श्री ह.भ.प. धन्यकुमार महाराज मिरकुटे (सोलापुर)</p>
+                  </div>
+                </div>
+             </div>
+
+             <div className="bg-orange-50 p-6 rounded-3xl shadow-md border border-orange-200 relative overflow-hidden">
+                <div className="absolute top-0 right-0 p-2 opacity-10">
+                  <Disc size={40} className="text-orange-600" />
+                </div>
+                <h3 className="text-xl font-bold text-orange-900 mb-4 flex items-center">
+                  !! मृदंगाचार्य !!
+                </h3>
+                <div className="space-y-3 text-slate-800">
+                  <div className="flex items-start">
+                    <span className="bg-orange-600 text-white w-5 h-5 rounded-full flex items-center justify-center text-[10px] mr-3 mt-1 shrink-0">🚩</span>
+                    <p className="font-bold text-lg leading-tight">श्री ह.भ.प. चंद्रकान्त महाराज पांचाळ (लातूर)</p>
+                  </div>
+                </div>
+             </div>
+
+             <div className="bg-orange-50 p-6 rounded-3xl shadow-md border border-orange-200 relative overflow-hidden">
+                <div className="absolute top-0 right-0 p-2 opacity-10">
+                  <Music size={40} className="text-orange-600" />
+                </div>
+                <h3 className="text-xl font-bold text-orange-900 mb-4 flex items-center">
+                  !! वीणा प्रहर !!
+                </h3>
+                <div className="space-y-3 text-slate-800">
+                  <div className="flex items-start">
+                    <span className="text-orange-600 mr-2 shrink-0">🚩</span>
+                    <p className="font-bold">वारकरी मंडळ, सिवनी</p>
+                  </div>
+                </div>
+             </div>
+           </div>
+        </section>
+
+        {/* ६. कीर्तन सोहळा सूची */}
+        <section className="mb-16">
+           <div className="bg-white p-8 rounded-3xl shadow-lg border border-orange-100 relative overflow-hidden flex flex-col">
+              <div className="absolute top-0 right-0 p-4 opacity-5 pointer-events-none">
+                <Star size={100} className="text-orange-600" />
+              </div>
+              <h3 className="text-3xl font-bold text-orange-800 mb-8 flex items-center justify-center">
+                कीर्तन सोहळा सूची
+              </h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {kirtankarList.map((item, index) => (
+                    <div 
+                      key={index} 
+                      className={`p-4 rounded-2xl border transition-all duration-300 shadow-sm hover:shadow-md ${
+                        item.isSpecial 
+                        ? 'bg-gradient-to-br from-yellow-50 to-orange-100 border-orange-400 border-2 ring-2 ring-orange-200 ring-offset-2' 
+                        : 'bg-orange-50/50 border-orange-100'
+                      }`}
+                    >
+                      <div className="flex justify-between items-start mb-1">
+                        <p className={`text-[10px] font-bold uppercase tracking-widest ${item.isSpecial ? 'text-orange-700' : 'text-orange-600'}`}>
+                          {item.date}
+                        </p>
+                        {item.isSpecial && (
+                          <span className="bg-orange-600 text-white text-[9px] px-2 py-0.5 rounded-full font-bold animate-pulse">
+                            मुख्य सोहळा
+                          </span>
+                        )}
+                      </div>
+                      <p className={`text-sm md:text-base font-bold ${item.isSpecial ? 'text-orange-900' : 'text-slate-800'}`}>
+                        {item.name}
+                      </p>
+                      {item.time && (
+                        <p className={`text-xs md:text-sm font-semibold mt-1 ${item.isSpecial ? 'text-orange-700' : 'text-slate-600'}`}>
+                          {item.time}
+                        </p>
+                      )}
+                    </div>
+                  ))}
+              </div>
+              <div className="mt-8 p-4 bg-yellow-50 rounded-2xl border border-yellow-200">
+                <p className="text-xs text-orange-800 font-bold text-center italic">व समस्त ग्रामवासी, शिवनी (पांढुर्णा)</p>
+              </div>
+           </div>
+        </section>
+
+      </main>
+
+      {/* तळटीप */}
+      <footer className="bg-slate-900 text-white py-12 px-4 text-center">
+        <p className="text-orange-400 font-bold mb-4">पुंडलीक वरदे हरी विठ्ठल, श्री ज्ञानदेव तुकाराम।</p>
+        
+        <div className="flex flex-col space-y-4 items-center mb-8">
+          <div className="flex justify-center items-center space-x-2 opacity-80 hover:opacity-100 transition-opacity">
+            <Instagram size={20} className="text-orange-400" />
+            <a href="https://instagram.com/vitthal_rukhmini_mandir_seoni_" target="_blank" rel="noopener noreferrer" className="text-base md:text-lg font-semibold tracking-wide">@vitthal_rukhmini_mandir_seoni_</a>
+          </div>
+
+          <div className="flex justify-center items-center space-x-2 opacity-80 hover:opacity-100 transition-opacity">
+            <Youtube size={20} className="text-orange-400" />
+            <a href="#" className="text-base md:text-lg font-semibold tracking-wide">@VITTHAL RUKMINI MANDIR SEONI OFFICIAL</a>
+          </div>
+        </div>
+
+        <p className="opacity-60 text-sm">© २०२६ श्री विठ्ठल रुक्मिणी मंदिर, सिवनी</p>
+      </footer>
+
+      {/* फोन्ट आणि शैली */}
+      <style dangerouslySetInnerHTML={{ __html: `
+        @import url('https://fonts.googleapis.com/css2?family=Martel:wght@400;700;900&family=Yantra+Roman:wght@400;700&display=swap');
+        body { font-family: 'Martel', serif; }
+        h1, h2, h3 { font-family: 'Yantra Roman', serif; }
+        .shadow-glow { box-shadow: 0 0 15px rgba(253, 224, 71, 0.5); }
+        .drop-shadow-glow { filter: drop-shadow(0 0 8px rgba(253, 224, 71, 0.6)); }
+      `}} />
+    </div>
+  );
+};
+
+export default App;
